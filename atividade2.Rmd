@@ -1,0 +1,112 @@
+---
+title: "Relatório Modelos Lineares Generalizados"
+subtitle: "Atividade 2"
+author: "Thiago Tavares Lopes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+header-includes:
+   - \usepackage[brazil]{babel}
+   - \usepackage{bm}
+   - \usepackage{float}
+   - \usepackage{multirow}
+geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
+#toc: true #sumário
+output:
+  bookdown::pdf_document2:
+# editor_options:
+#   chunk_output_type: console
+#   markdown: 
+#     wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+options(encoding = "UTF-8")
+options(OutDec = ",")
+options(scipen = 999, digits =5)
+```
+
+```{r, include=FALSE}
+library(knitr)
+library(kableExtra)
+```
+
+
+# Ajuste de um modelo GLM
+
+```{r, include=FALSE}
+
+data<-read.table("Dados_aula_4.txt",h=T)
+attach(data)
+
+
+fit1<- glm(resp~cov1+cov2+cov3, family=poisson(link="log"))
+summary(fit1)
+
+fit2 <- glm(resp~cov1+cov3, family=poisson(link="log"))
+summary(fit2)
+
+
+
+```
+
+```{r, include=FALSE}
+summary_fit<-summary(fit1)
+#step(fit)
+# Extraindo a tabela de coeficientes
+coef_table <- summary_fit$coefficients
+
+# Convertendo a tabela de coeficientes em um data frame
+coef_df <- as.data.frame(coef_table)
+
+# add significância
+coef_df$Significance <- cut(coef_df[, 4], 
+                            breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                            labels = c("***", "**", "*", ".", ""))
+
+```
+
+A tabela 1, apresenta os resultados do primeiro ajuste do modelo. Nota-se, uma variável não significativa para o modelo, a mesma foi removida e o modelo foi ajustado novamente e seus resultados são apresentados na tabela 2.
+
+
+```{r, echo=FALSE}
+# Verificar e ajustar a codificação do dataframe
+coef_df[] <- lapply(coef_df, function(x) if (is.character(x)) iconv(x, to = "UTF-8") else x)
+
+# Gerar a tabela LaTeX
+
+kable(coef_df, format = "latex", booktabs = TRUE, caption = "Resultados do ajuste - modelo 1") %>%
+  kable_styling(latex_options = c("striped", "HOLD_position")) %>%
+  add_footnote(c("Nota: *** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
+```
+
+
+
+```{r, include=FALSE}
+summary_fit2<-summary(fit2)
+#step(fit)
+# Extraindo a tabela de coeficientes
+coef_table <- summary_fit2$coefficients
+
+# Convertendo a tabela de coeficientes em um data frame
+coef_df2 <- as.data.frame(coef_table)
+
+# add significância
+coef_df2$Significance <- cut(coef_df2[, 4], 
+                            breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                            labels = c("***", "**", "*", ".", ""))
+
+```
+
+
+
+```{r, echo=FALSE}
+# Verificar e ajustar a codificação do dataframe
+coef_df2[] <- lapply(coef_df2, function(x) if (is.character(x)) iconv(x, to = "UTF-8") else x)
+
+# Gerar a tabela LaTeX
+
+kable(coef_df2, format = "latex", booktabs = TRUE, caption = "Resultados do ajuste - modelo 2") %>%
+  kable_styling(latex_options = c("striped", "HOLD_position")) %>%
+  add_footnote(c("Nota: *** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
+```
+

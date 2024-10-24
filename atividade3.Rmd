@@ -1,0 +1,108 @@
+---
+title: "Relatório Modelos Lineares Generalizados"
+subtitle: "Atividade 2"
+author: "Thiago Tavares Lopes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+header-includes:
+   - \usepackage[brazil]{babel}
+   - \usepackage{bm}
+   - \usepackage{float}
+   - \usepackage{multirow}
+geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
+#toc: true #sumário
+output:
+  bookdown::pdf_document2:
+# editor_options:
+#   chunk_output_type: console
+#   markdown: 
+#     wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+options(encoding = "UTF-8")
+options(OutDec = ",")
+options(scipen = 999, digits =5)
+```
+
+```{r, include=FALSE}
+library(knitr)
+library(kableExtra)
+```
+
+
+# Ajuste de um modelo GLM
+
+No primeiro momento, foi feito um ajuste com todas as variáveis presentes no banco de dados foram utilizadas para realizar o ajuste do modelo. Em seguida foi utilizada a função **step** para realizar a seleção do modelo via stepwise e AIC. 
+
+
+
+```{r, include=FALSE}
+
+
+data_1 <- read.delim(file="mlg_logistica.txt", header=T)
+
+# read.delim esta sendo utilizado pois ha dotos faltantes e read.table teria problema
+dim(data_1)
+
+data<-na.omit(data_1) #excluindo linhas com NA
+dim(data)
+
+#Ver nome das vari?veis do objeto:
+names(data)
+summary(data)
+
+#Anexar o objeto no caminho de procura:
+attach(data)
+```
+
+
+
+```{r, eval=TRUE}
+ajuste <- glm(ILL~AGE+SEX+BAKEDHAM+SPINACH+
+                 MASHEDPOTA+CABBAGESAL+JELLO+ROLLS+
+                 BROWNBREAD+MILK+COFFEE+WATER+
+                 CAKES+VANILLA+CHOCOLATE+FRUITSALAD, 
+               family=binomial)
+summary(ajuste)
+```
+
+
+
+```{r, include=FALSE}
+step(ajuste)
+
+
+ajuste1<-glm(formula = ILL ~ SEX + VANILLA, family = binomial)
+summary(ajuste1)
+
+```
+
+Como resultado foi obtido um novo modelo, com as variáveis **SEX** e **VANILLA**
+
+```{r, include=FALSE}
+summary_fit<-summary(ajuste1)
+#step(fit)
+# Extraindo a tabela de coeficientes
+coef_table <- summary_fit$coefficients
+
+# Convertendo a tabela de coeficientes em um data frame
+coef_df <- as.data.frame(coef_table)
+
+# add significância
+coef_df$Significance <- cut(coef_df[, 4], 
+                            breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                            labels = c("***", "**", "*", ".", ""))
+
+```
+
+```{r, echo=FALSE}
+# Verificar e ajustar a codificação do dataframe
+coef_df[] <- lapply(coef_df, function(x) if (is.character(x)) iconv(x, to = "UTF-8") else x)
+
+# Gerar a tabela LaTeX
+
+kable(coef_df, format = "latex", booktabs = TRUE, caption = "Resultados do ajuste - modelo 1") %>%
+  kable_styling(latex_options = c("striped", "HOLD_position")) %>%
+  add_footnote(c("Nota: *** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
+```
