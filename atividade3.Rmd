@@ -1,6 +1,6 @@
 ---
 title: "Relatório Modelos Lineares Generalizados"
-subtitle: "Atividade 2"
+subtitle: "Atividade 3"
 author: "Thiago Tavares Lopes"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 header-includes:
@@ -78,7 +78,7 @@ summary(ajuste1)
 
 ```
 
-Como resultado foi obtido um novo modelo, com as variáveis **SEX** e **VANILLA**
+Como resultado foi obtido um novo modelo, com as variáveis **SEX** e **VANILLA** significativas para o modelo e com AIC igual a $72,4$.
 
 ```{r, include=FALSE}
 summary_fit<-summary(ajuste1)
@@ -105,4 +105,49 @@ coef_df[] <- lapply(coef_df, function(x) if (is.character(x)) iconv(x, to = "UTF
 kable(coef_df, format = "latex", booktabs = TRUE, caption = "Resultados do ajuste - modelo 1") %>%
   kable_styling(latex_options = c("striped", "HOLD_position")) %>%
   add_footnote(c("Nota: *** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
+```
+
+
+
+```{r, include=FALSE}
+# [G1] resíduos deviance vs indices
+r<- residuals(ajuste,type="deviance")
+plot(r,pch="+") # plota os graficos com simbolo + para os pontos
+
+
+
+abline(h=c(-2,0,2),lty=3) # inlcui linhas horizontais para melhorar visualizado 
+
+# [G2] envelope simulado
+library(hnp) # pacote util para envelope simulado
+# note que eh preciso definir o residuo para o envelope. As opcoes sao:
+# "deviance", "pearson", "response", "working", "simple", "student", or "standard"
+hnp(ajuste1, resid.type="deviance", halfnormal = F) # melhor. Nao eh half (metade)
+
+# [G3] distacia de Cook
+d <- cooks.distance(ajuste1) # salva distacia de cook em d
+plot(d,pch="+") 
+
+# [G4] alavancagem
+h<-hatvalues(ajuste1)
+plot(h,pch="+") 
+
+# Varias medidas de influencia:
+influence.measures(ajuste1)
+
+# Graficos todos juntos
+par(mfrow = c(2, 2)) # grafico em duas linhas e duas colunas
+plot(r,pch="+") # residuos
+abline(h=c(-2,0,2),lty=3) 
+hnp(ajuste1, resid.type="student", halfnormal = F) # envelope
+plot(d,pch="+") # cook
+plot(h,pch="+") # alavanca
+```
+
+
+
+A figura \ref{fig:fig}, apresenta a análise diagnóstico para o modelos proposto. 
+
+```{r, echo=FALSE, fig.width = 6.5, fig.height= 6.5,fig.cap="Análise diagnóstico", label="fig"}
+knitr::include_graphics("Rplot01.pdf")
 ```
