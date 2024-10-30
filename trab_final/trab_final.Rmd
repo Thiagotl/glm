@@ -1,0 +1,24 @@
+---
+title: "Trabalho Final - Modelo Linear Generalizado"
+author: "Thiago Tavares Lopes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+header-includes:
+   - \usepackage[brazil]{babel}
+   - \usepackage{bm}
+   - \usepackage{float}
+   - \usepackage{multirow}
+geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
+output:
+  bookdown::pdf_document2:
+    fig.align: 'center'
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: sentence
+---
+```{r setup, include=FALSE}
+options(encoding = "UTF-8")
+options(OutDec = ",")
+options(scipen = 999, digits =5)
+
+```
