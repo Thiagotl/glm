@@ -69,3 +69,9 @@ media_diaria<-media_diaria |>
 # https://aqicn.org/city/sao-paulo/pt/
 
 # Your token is f6cd930c4f6acd42e01a1e1bc3ff03a33c913d7b
+# https://aqicn.org/json-api/doc/ - documentacao API
+
+# https://www.timeseriesclassification.com/dataset.php
+# https://archive.ics.uci.edu/datasets
+
+# https://www.kaggle.com/datasets/rukenmissonnier/research-on-algae-growth-in-the-laboratory
