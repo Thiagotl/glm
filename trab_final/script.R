@@ -75,3 +75,22 @@ media_diaria<-media_diaria |>
 # https://archive.ics.uci.edu/datasets
 
 # https://www.kaggle.com/datasets/rukenmissonnier/research-on-algae-growth-in-the-laboratory
+
+
+
+
+
+#https://catalog.data.gov/dataset/river-cyanobacteria-datasets
+
+
+
+
+
+
+
+
+
+
+
+
+
