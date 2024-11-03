@@ -1,5 +1,6 @@
 library(readxl)
 library(tidyverse)
+library(MASS)
 
 # teste para qualidade do AR
 
@@ -83,14 +84,37 @@ media_diaria<-media_diaria |>
 #https://catalog.data.gov/dataset/river-cyanobacteria-datasets
 
 
+## DADOS COM CIANOS BACTERIAS
+
+
+ciano <- read_excel("trab_final/ciano.xlsx")
+View(ciano)
+attach(ciano)
+ciano$chlorophyll_a<-as.double(ciano$chlorophyll_a)
+
+
+ciano$chlorophyll_a[is.na(ciano$chlorophyll_a)]<-round(mean(ciano$chlorophyll_a, na.rm = TRUE), 2)
+
+media_diaria$o3[is.na(media_diaria$o3)]<-mean(media_diaria$o3, na.rm = TRUE)
+
+
+corr<-cor(ciano)
+
+corrplot::corrplot(corr, tl.cex = 0.8)
+
+hist(ciano$chlorophyll_a)
+
+
+fit <- glm(chlorophyll_a ~ ., family = Gamma(link = "log"), data = ciano)
+
+summary(fit)
+
+step(fit)
+stepAIC(fit)
 
 
 
-
-
-
-
-
-
-
-
+fit2<-glm(formula = chlorophyll_a ~ total_nitrogen + total_phosphorus + 
+            dissolved_oxigen + pH_water + carbon_dioxide_water, family = Gamma(link = "log"), 
+          data = ciano)
+summary(fit2)
