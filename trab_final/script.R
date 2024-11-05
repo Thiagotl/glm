@@ -169,20 +169,20 @@ RsqGLM(fit2) # computo de varios pseudo-R2
 
 
 
-# 
-# library(auditor)
-# 
-# lm_audit <- audit(fit2, data = ciano, y = ciano$chlorophyll_a)
-# 
-# hn_lm <- model_halfnormal(lm_audit)
-# 
-# plot_halfnormal(hn_lm)
-# 
-# 
-# cd_lm <- model_cooksdistance(lm_audit)
-# 
-# # plot results
-# plot_cooksdistance(cd_lm)
+
+library(auditor)
+
+lm_audit <- audit(fit2, data = ciano, y = ciano$chlorophyll_a)
+
+hn_lm <- model_halfnormal(lm_audit)
+
+plot_halfnormal(hn_lm)
+
+
+cd_lm <- model_cooksdistance(lm_audit)
+
+# plot results
+plot_cooksdistance(cd_lm)
 
 
 
