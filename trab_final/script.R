@@ -156,8 +156,6 @@ plot(h,pch="+")
 # Varias medidas de influencia:
 influence.measures(fit2)
 
-
-
 library(fmsb) # para computo do R2 de Nagelkerke (1991)
 NagelkerkeR2(fit2) # ruim
 
@@ -168,34 +166,58 @@ RsqGLM(fit2) # computo de varios pseudo-R2
 
 
 
+# coeficiente de determinacao generalizado
+# Reference: 
+# Nagelkerke N (1991) A note on a general definition of the coefficient of determination. Biometrika, 78: 691-692.
 
+library(fmsb) # para computo do R2 de Nagelkerke (1991)
+NagelkerkeR2(ajuste1) # ruim
 
-library(auditor)
+library(modEvA)
+RsqGLM(ajuste1) # computo de varios pseudo-R2
 
-lm_audit <- audit(fit2, data = ciano, y = ciano$chlorophyll_a)
+# perceba que ha diferencas nas duas funcoes. Chequemos:
+# Calculando o R2 de Nagelkerke
+fitnulo<-glm(dep~+1,family=poisson(link= "identity" )) 
 
-hn_lm <- model_halfnormal(lm_audit)
+lfit<-logLik(ajuste1)
+lnulo<-logLik(fitnulo)
+n<-length(dep)
 
-plot_halfnormal(hn_lm)
+R2<- 1-exp((-2/n)*(lfit-lnulo))
+R2
 
+maxR2<- 1-exp((2/n)*lnulo)
 
-cd_lm <- model_cooksdistance(lm_audit)
+R2N<-R2/maxR2
+R2N # R2 de Nagelkerke
 
-# plot results
-plot_cooksdistance(cd_lm)
-
-# deviance
-
-
-explainer_lm <- explain(lm_audit, data = ciano, y = ciano$chlorophyll_a)
-
-
-
-lm_residuals <- model_residual(explainer_lm)
-
-plot_residual(lm_residuals)
-
-plot(lm_residuals)
+# library(auditor)
+# 
+# lm_audit <- audit(fit2, data = ciano, y = ciano$chlorophyll_a)
+# 
+# hn_lm <- model_halfnormal(lm_audit)
+# 
+# plot_halfnormal(hn_lm)
+# 
+# 
+# cd_lm <- model_cooksdistance(lm_audit)
+# 
+# # plot results
+# plot_cooksdistance(cd_lm)
+# 
+# # deviance
+# 
+# 
+# explainer_lm <- explain(lm_audit, data = ciano, y = ciano$chlorophyll_a)
+# 
+# 
+# 
+# lm_residuals <- model_residual(explainer_lm)
+# 
+# plot_residual(lm_residuals)
+# 
+# plot(lm_residuals)
 
 
 
