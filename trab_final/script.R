@@ -95,7 +95,7 @@ ciano$chlorophyll_a<-as.double(ciano$chlorophyll_a)
 
 ciano$chlorophyll_a[is.na(ciano$chlorophyll_a)]<-round(mean(ciano$chlorophyll_a, na.rm = TRUE), 2)
 
-media_diaria$o3[is.na(media_diaria$o3)]<-mean(media_diaria$o3, na.rm = TRUE)
+
 
 
 corr<-cor(ciano)
@@ -184,14 +184,18 @@ cd_lm <- model_cooksdistance(lm_audit)
 # plot results
 plot_cooksdistance(cd_lm)
 
+# deviance
+
+
+explainer_lm <- explain(lm_audit, data = ciano, y = ciano$chlorophyll_a)
 
 
 
+lm_residuals <- model_residual(explainer_lm)
 
+plot_residual(lm_residuals)
 
-
-
-
+plot(lm_residuals)
 
 
 
