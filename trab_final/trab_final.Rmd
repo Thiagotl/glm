@@ -22,3 +22,7 @@ options(OutDec = ",")
 options(scipen = 999, digits =5)
 
 ```
+
+
+
+
