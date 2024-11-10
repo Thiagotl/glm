@@ -1,5 +1,5 @@
 ---
-title: "Trabalho Final - Modelo Linear Generalizado"
+title: "Explorando a Relação entre Variáveis Ambientais e a Produção de Clorofila-a em Cianobactérias: Uma Abordagem com Modelos Lineares Generalizados"
 author: "Thiago Tavares Lopes"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 header-includes:
@@ -23,6 +23,92 @@ options(scipen = 999, digits =5)
 
 ```
 
+```{r, include=FALSE}
 
+library(readxl)
+library(tidyverse)
+library(MASS)
+library(fmsb)
+library(modEvA)
+library(kableExtra)
+library(knitr)
+```
+
+
+# Introdução 
+
+Foi proposto um modelo linear generalizado para avaliar a produção de clorofila a em  cianobactérias em diferentes condições climáticas. O *dataset* utilizado foi obtido do catálogo de dados público do governo dos Estados Unidos, disponível em [*Data.Gov*](https://catalog.data.gov/dataset/river-cyanobacteria-datasets). Esse *datset* possui informações detalhadas sobre diferentes espécies de cianobactérias, sendo elas: Informações genéticas, condições climáticas do local de coleta das amostras e localização geográfica da coleta. Para a construção do modelo, foram consideradas exclusivamente as informações de clorofila a quantificada e condições ambientais (físicas e químicas) do local da coleta das amostras. O trabalho aqui desenvolvido foi fundamentado no artigo disponível no seguinte [link](https://www.nature.com/articles/s41598-023-29037-6).
+
+
+
+
+```{r, include=FALSE}
+ciano <- read_excel("G:/Meu Drive/estatistica/mlg/glm/trab_final/ciano.xlsx")
+ciano$chlorophyll_a<-as.double(ciano$chlorophyll_a)
+ciano$chlorophyll_a[is.na(ciano$chlorophyll_a)]<-round(mean(ciano$chlorophyll_a, na.rm = TRUE), 2)
+
+#Descritiva basica para o dataset
+
+summary(ciano)
+
+# primeiro modelo 
+
+fit <- glm(chlorophyll_a ~ ., family = Gamma(link = "log"), data = ciano)
+
+#fit do primeiro modelo
+summary(fit)
+
+
+#verificando o ajuste do modelo usando o deviance
+
+qchisq(0.95,44)
+```
+
+
+
+
+```{r, include=FALSE}
+#tabela com os valores do primeiro fit 
+
+summary_fit<-summary(fit)
+
+coef_table<-summary_fit$coefficients
+
+coef_df<-as.data.frame(coef_table)
+
+
+coef_df$Significance <- cut(coef_df[, 4], 
+                            breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                            labels = c("***", "**", "*", ".", ""))
+
+
+```
+
+
+Modelo 1
+
+
+```{r echo=FALSE, label=""}
+
+kbl(coef_df, caption = "", booktabs = TRUE) |> 
+  kable_styling(latex_options = c("striped","HOLD_position")) |> 
+  add_footnote(c("Nota:*** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
+
+```
+
+
+Foi construído um novo modelo a partir do resultado da técnica de *stepwise*. 
+
+
+
+```{r, include=FALSE}
+fit2<-glm(formula = chlorophyll_a ~ total_nitrogen + total_phosphorus + 
+            dissolved_oxigen + pH_water + carbon_dioxide_water, family = Gamma(link = "log"), 
+          data = ciano)
+summary(fit2)
+
+qchisq(0.95,52)
+
+```
 
 

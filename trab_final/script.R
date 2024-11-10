@@ -126,6 +126,7 @@ fit2<-glm(formula = chlorophyll_a ~ total_nitrogen + total_phosphorus +
           data = ciano)
 summary(fit2)
 
+qchisq(0.95,52)
 
 
 
