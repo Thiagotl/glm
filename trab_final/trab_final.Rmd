@@ -32,6 +32,11 @@ library(fmsb)
 library(modEvA)
 library(kableExtra)
 library(knitr)
+library(GGally)
+library(hnp)
+
+
+
 ```
 
 
@@ -110,5 +115,125 @@ summary(fit2)
 qchisq(0.95,52)
 
 ```
+
+# Resultados 
+Nesta seção são apresentados os resultados da análise de resíduos para o modelo 2
+
+
+## Análise de Resíduos
+
+
+
+```{r}
+# RESIDUAL ANALYSIS
+
+
+# coeficiente de determinacao generalizado (Nagelkerke, 1991)
+
+RsqGLM(fit2,plot=F)
+
+
+
+# DIAGNOSTIC ANALYSIS 
+
+
+td = resid(fit2,type="deviance")
+
+# RESIDUOS X INDICES
+
+abline(plot(td), lty=c(2,2,3), h=c(-2,2,0))
+
+
+abline(plot(fitted(fit2),td) , lty=c(2,2,3), h=c(-2,2,0))
+
+
+
+
+#fitted(fit2) -  aqui os valores já estão na escala original da variável resposta 
+
+#valores estimados para o preditor linear 
+
+#fit2$linear.predictors
+
+
+```
+
+
+
+```{r}
+n1=2
+
+
+#envelope simulado
+
+hnp(fit2, halfnormal = F, how.many.out = T)
+
+
+# Alavancagem
+# alavancagem vs valores ajustados
+plot(fitted(fit2),hatvalues(fit2),ylab="Alavancagem")
+#identify(fitted(fit),hatvalues(fit), n=n1) # identifica n1 valores no grafico
+#which(hatvalues(fit2)>0.3)
+
+# DFFIT
+plot(dffits(fit2),ylab="DFFITS")
+#identify(dffits(fit1), n=n1) # identifica n1 valores no grafico
+
+# distancia de Cook
+# cook vs valores ajustados
+plot(fitted(fit2),cooks.distance(fit2),ylab="Distancia de Cook")
+#identify(fitted(fit1),cooks.distance(fit1), n=n1) 
+#which(cooks.distance(fit2)>0.2)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
