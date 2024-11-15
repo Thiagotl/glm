@@ -161,11 +161,11 @@ abline(plot(fitted(fit2),td) , lty=c(2,2,3), h=c(-2,2,0))
 
 
 ```{r}
-n1=2
+#n1=2
 
 
 #envelope simulado
-
+#set.seed(2)
 hnp(fit2, halfnormal = F, how.many.out = T)
 
 
