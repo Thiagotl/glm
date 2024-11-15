@@ -45,7 +45,7 @@ Devido a atividade fotossintetizante das cianobactérias estima-se que as primei
 As cianobactérias são classificadas como microrganismo procariontes autotróficos com sistemas adaptativos particulares, como a capacidade  de fixar nitrogênio do ar atmosférico devido a presença da enzima nitrogenase localizada nos heterócitos (PETERS e colab., 2015). São capazes de realizar a fotossíntese na presença ou ausência de oxigênio. Existem espécies que se desenvolvem na ausência de luz  ou em condições anaeróbicas utilizando sulfetos como doadores de elétrons para a fotossíntese, além disso são bactérias gram – negativas e dispõem da estrutura chamada bainha mucilaginosa e tricoma, podem ou não apresentar o acineto e o heterócitos  que  são estruturas especializadas na sobrevivência da espécie em ambientes não favoráveis (ABED e colab., 2009; COHEN e colab., 1986; HUISMAN e colab., 2018; LAU e colab., 2015; STAL e MOEZELAAR, 1997). 
 
 ```{r, echo=FALSE, out.width = "80%", fig.cap="Cianobactérias", fig.pos = 'H', fig.align = 'center', label = "fig1"}
-knitr::include_graphics("G:/Meu Drive/estatistica/mlg/glm/trab_final/imagens/cianobacteria.png")
+knitr::include_graphics("imagens/cianobacteria.png")
 
 ```
 
@@ -54,12 +54,21 @@ Clorofila a
 
 
 
-```{r}
+```{r,  echo=FALSE, out.width = "60%", fig.cap="Clorofila a", fig.pos = 'H', fig.align = 'center', label = "fig2"}
+
+
+knitr::include_graphics("imagens/clorofila-a.png")
+
 
 ```
 
 
 # Resultados
+
+
+
+Nesta seção são apresentados os resultados da análise de resíduos para o modelo 2
+
 
 ```{r, include=FALSE}
 ciano <- read_excel("G:/Meu Drive/estatistica/mlg/glm/trab_final/ciano.xlsx")
@@ -82,8 +91,6 @@ summary(fit)
 
 qchisq(0.95,44)
 ```
-
-
 
 
 ```{r, include=FALSE}
@@ -131,7 +138,7 @@ qchisq(0.95,52)
 ```
 
  
-Nesta seção são apresentados os resultados da análise de resíduos para o modelo 2
+
 
 
 ## Análise de Resíduos
