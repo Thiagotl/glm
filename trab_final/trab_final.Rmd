@@ -75,7 +75,7 @@ knitr::include_graphics("imagens/clorofila-a.png")
 
 # Seleção do modelo
 
-Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Neste modelo, a variável resposta $ Y (chlorophyll_a)$ segue uma distribuição Gama. A distribuição Gama é usada para modelar variáveis contínuas positivas e assimétricas, como concentrações químicas. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
+Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Neste modelo, a variável resposta $Y(chlorophyll_a)$ segue uma distribuição Gama. A distribuição Gama é usada para modelar variáveis contínuas positivas e assimétricas, como concentrações químicas. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
 
 ```{r, include=FALSE}
 ciano <- read_excel("ciano.xlsx")
@@ -146,7 +146,7 @@ qchisq(0.95,52)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 
 #Para verificar se a função de ligação log é apropriada.
 boxcox(fit2)
@@ -190,6 +190,38 @@ kbl(coef_df2, caption = "Resultdos para o modelo 2", booktabs = TRUE) |>
 
 ```
 
+\[
+\eta = \beta_0 + \beta_1 \cdot \text{total\_nitrogen} + \beta_2 \cdot \text{total\_phosphorus} + \beta_3 \cdot \text{dissolved\_oxigen} + \beta_4 \cdot \text{pH\_water} + \beta_5 \cdot \text{carbon\_dioxide\_water}
+\]
+
+
+\[
+\begin{aligned}
+\eta = -4.239760 + 0.000889 \cdot \text{total\_nitrogen} + 0.006927 \cdot \text{total\_phosphorus} \\
+- 0.132727 \cdot \text{dissolved\_oxigen} + 0.836286 \cdot \text{pH\_water} + 0.075904 \cdot \text{carbon\_dioxide\_water}
+\end{aligned}
+\]
+
+
+\[
+\begin{array}{|l|r|p{8cm}|}
+\hline
+\textbf{Variável} & \textbf{Coef.(Estimativa)} & \textbf{Interpretação} \\
+\hline
+\text{(Intercept)} & -4,239760 & Valor médio de \( \log(\mu) \) quando todos os preditores são iguais a zero. \\
+\hline
+\text{total\_nitrogen} & 0,000889 & Para cada aumento unitário em \( \text{total\_nitrogen} \), \( \mu \) cresce em \( e^{0,000889} \). \\
+\hline
+\text{total\_phosphorus} & 0,006927 & Para cada aumento unitário em \( \text{total\_phosphorus} \), \( \mu \) cresce em \( e^{0,006927} \). \\
+\hline
+\text{dissolved\_oxigen} & -0,132727 & Para cada aumento unitário em \( \text{dissolved\_oxigen} \), \( \mu \) diminui em \( e^{-0,132727} \). \\
+\hline
+\text{pH\_water} & 0,836286 & Para cada aumento unitário em \( \text{pH\_water} \), \( \mu \) cresce em \( e^{0,836286} \). \\
+\hline
+\text{carbon\_dioxide\_water} & 0,075904 & Para cada aumento unitário em \( \text{carbon\_dioxide\_water} \), \( \mu \) cresce em \( e^{0,075904} \). \\
+\hline
+\end{array}
+\]
 
 
 ## Análise de Resíduos
