@@ -71,16 +71,14 @@ knitr::include_graphics("imagens/clorofila-a.png")
 
 ```
 
+\newpage
 
-# Resultados
+# Seleção do modelo
 
-
-
-Nesta seção são apresentados os resultados da análise de resíduos para o modelo 2
-
+Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Neste modelo, a variável resposta $ Y (chlorophyll_a)$ segue uma distribuição Gama. A distribuição Gama é usada para modelar variáveis contínuas positivas e assimétricas, como concentrações químicas. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
 
 ```{r, include=FALSE}
-ciano <- read_excel("G:/Meu Drive/estatistica/mlg/glm/trab_final/ciano.xlsx")
+ciano <- read_excel("ciano.xlsx")
 ciano$chlorophyll_a<-as.double(ciano$chlorophyll_a)
 ciano$chlorophyll_a[is.na(ciano$chlorophyll_a)]<-round(mean(ciano$chlorophyll_a, na.rm = TRUE), 2)
 
@@ -126,14 +124,14 @@ A tabela \ref{tab:tab1}, apresenta os resultados do primeiro modelo construído.
 
 ```{r echo=FALSE, label="tab1"}
 
-kbl(coef_df, caption = "", booktabs = TRUE) |> 
+kbl(coef_df, caption = "Resultados para o modelo 1", booktabs = TRUE) |> 
   kable_styling(latex_options = c("striped","HOLD_position")) |> 
   add_footnote(c("Nota:*** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
 
 ```
 
 
-Foi elaborado um novo modelo com $AIC=317$, *Residual Deviance = 28,3*. 
+Foi elaborado um novo modelo com $AIC=317$, *Residual Deviance = 28,3*. O mesmo é apresentado na tabela \ref{tab:tab2}, observa-se que as variáveis significativas para o modelo são, *total_nitrogen*, *total_phosporus*, *dissolved_oxigen*, *pH_whater*, *carbon_dioxide_water*.
 
 
 
@@ -184,9 +182,9 @@ coef_df2$Significance <- cut(coef_df2[, 4],
 
 
 
-```{r echo=FALSE, label=""}
+```{r echo=FALSE, label="tab2"}
 
-kbl(coef_df2, caption = "", booktabs = TRUE) |> 
+kbl(coef_df2, caption = "Resultdos para o modelo 2", booktabs = TRUE) |> 
   kable_styling(latex_options = c("striped","HOLD_position")) |> 
   add_footnote(c("Nota:*** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
 
