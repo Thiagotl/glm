@@ -49,13 +49,17 @@ Foi proposto um modelo linear generalizado para avaliar a produção de clorofil
 Devido a atividade fotossintetizante das cianobactérias estima-se que as primeiras tiveram origem entre 2,6 a 3,5 bilhões de anos atrás (LAU e colab., 2015) e são uma das principais responsáveis pela atmosfera oxigenada como conhecemos hoje, participando do “Grande Evento de Oxigenação’’(HUISMAN e colab., 2018; PLANAVSKY e colab., 2014; RASMUSSEN e colab., 2008). O estromatólitos são uma evidência da atividade de microrganismos que ocorreu a , aproximadamente 3,700 milhões de anos  atrás (NUTMAN e colab., 2016).
 As cianobactérias são classificadas como microrganismo procariontes autotróficos com sistemas adaptativos particulares, como a capacidade  de fixar nitrogênio do ar atmosférico devido a presença da enzima nitrogenase localizada nos heterócitos (PETERS e colab., 2015). São capazes de realizar a fotossíntese na presença ou ausência de oxigênio. Existem espécies que se desenvolvem na ausência de luz  ou em condições anaeróbicas utilizando sulfetos como doadores de elétrons para a fotossíntese, além disso são bactérias gram – negativas e dispõem da estrutura chamada bainha mucilaginosa e tricoma, podem ou não apresentar o acineto e o heterócitos  que  são estruturas especializadas na sobrevivência da espécie em ambientes não favoráveis (ABED e colab., 2009; COHEN e colab., 1986; HUISMAN e colab., 2018; LAU e colab., 2015; STAL e MOEZELAAR, 1997). 
 
-```{r, echo=FALSE, out.width = "80%", fig.cap="Cianobactérias", fig.pos = 'H', fig.align = 'center', label = "fig1"}
+A figura \ref{fig:fig1}, apresenta algumas das cianobactérias encontradas na região amazônica. As mesmas podem apresentar estrutura filamentosa, colonial, etc.
+
+```{r, echo=FALSE, out.width = "80%", fig.cap="Cianobactérias-Fonte: Coleção Amazônica de Cianobactérias e Microalgas", fig.pos = 'H', fig.align = 'center', label = "fig1"}
 knitr::include_graphics("imagens/cianobacteria.png")
 
 ```
 
 
-Clorofila a
+A clorofila a \ref{fig:fig2} é um pigmento verde ou azul que capta a luz natural ou sintética e é essencial para a fotossíntese, é  encontrado em todos os grupos de vegetais e outros organismos
+autótrofos, utilizada como indicadora da biomassa em
+ambientes aquáticos.
 
 
 
@@ -230,7 +234,7 @@ RsqGLM(fit2,plot=F)
 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,  out.width = "80%", fig.cap="Envelope Simulado", fig.pos = 'H', fig.align = 'center', label = "envelope"}
 #n1=2
 
 
@@ -259,7 +263,7 @@ hnp(fit2, halfnormal = F, how.many.out = T,  col.out = "red", main = "")
 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,  out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "cook"}
 #Grafico distancia de cook
 
 n<-length(ciano)
@@ -297,7 +301,9 @@ ggplot(cook_data, aes(x = Fitted, y = CookDistance))+
 
 ```
 
-```{r, echo=FALSE}
+
+
+```{r, echo=FALSE, out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "residuos"}
 td <- resid(fit2, type = "deviance")
 fitted_values <- fitted(fit2)
 
