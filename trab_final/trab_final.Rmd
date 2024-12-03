@@ -32,6 +32,11 @@ library(kableExtra)
 library(knitr)
 library(GGally)
 library(hnp)
+
+####
+library(car)
+library(lmtest)
+
 ```
 
 
@@ -93,6 +98,8 @@ qchisq(0.95,44)
 ```
 
 
+
+
 ```{r, include=FALSE}
 #tabela com os valores do primeiro fit 
 
@@ -111,10 +118,9 @@ coef_df$Significance <- cut(coef_df[, 4],
 ```
 
 
-Modelo 1
+A tabela \ref{tab:tab1}, apresenta os resultados do primeiro modelo construído. Nota-se, que apenas as variáveis  *total_nitrogen*, *pH_water* e *total_nitrogen_water...8*, foram significativas para o modelo. Por conseguinte, foi utilizado a técnica **stepwise** para escolher um novo modelo baseado no menor AIC. 
 
-
-```{r echo=FALSE, label=""}
+```{r echo=FALSE, label="tab1"}
 
 kbl(coef_df, caption = "", booktabs = TRUE) |> 
   kable_styling(latex_options = c("striped","HOLD_position")) |> 
@@ -123,7 +129,7 @@ kbl(coef_df, caption = "", booktabs = TRUE) |>
 ```
 
 
-Foi construído um novo modelo a partir do resultado da técnica de *stepwise*. 
+Foi elaborado um novo modelo com $AIC=317$, *Residual Deviance = 28,3*. 
 
 
 
@@ -137,7 +143,50 @@ qchisq(0.95,52)
 
 ```
 
- 
+
+```{r}
+
+#Para verificar se a função de ligação log é apropriada.
+boxcox(fit2)
+
+#Certifique-se de que todas as variáveis explicativas têm uma relação linear na escala da função de ligação (log neste caso)
+
+
+#crPlots(fit2)
+
+
+#bptest(fit2)
+
+
+```
+
+
+```{r, include=FALSE}
+#tabela com os valores do primeiro fit 
+
+summary_fit2<-summary(fit2)
+
+coef_table2<-summary_fit2$coefficients
+
+coef_df2<-as.data.frame(coef_table2)
+
+
+coef_df2$Significance <- cut(coef_df2[, 4], 
+                            breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                            labels = c("***", "**", "*", ".", ""))
+
+
+```
+
+
+
+```{r echo=FALSE, label=""}
+
+kbl(coef_df2, caption = "", booktabs = TRUE) |> 
+  kable_styling(latex_options = c("striped","HOLD_position")) |> 
+  add_footnote(c("Nota:*** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
+
+```
 
 
 
@@ -181,37 +230,36 @@ RsqGLM(fit2,plot=F)
 
 
 
-```{r}
+```{r, echo=FALSE}
 #n1=2
 
 
 #envelope simulado
-#set.seed(2)
+set.seed(2)
 hnp(fit2, halfnormal = F, how.many.out = T,  col.out = "red", main = "")
 
 
 # # Alavancagem
 # # alavancagem vs valores ajustados
-# plot(fitted(fit2),hatvalues(fit2),ylab="Alavancagem")
+#plot(fitted(fit3),hatvalues(fit3),ylab="Alavancagem")
 # #identify(fitted(fit),hatvalues(fit), n=n1) # identifica n1 valores no grafico
 # #which(hatvalues(fit2)>0.3)
 # 
 # # DFFIT
-# plot(dffits(fit2),ylab="DFFITS")
+#plot(dffits(fit3),ylab="DFFITS")
 # #identify(dffits(fit1), n=n1) # identifica n1 valores no grafico
 # 
 # # distancia de Cook
 # # cook vs valores ajustados
-# plot(fitted(fit2),cooks.distance(fit2),ylab="Distancia de Cook")
+#plot(fitted(fit3),cooks.distance(fit3),ylab="Distancia de Cook")
 # #identify(fitted(fit1),cooks.distance(fit1), n=n1) 
 # #which(cooks.distance(fit2)>0.2)
-
 
 ```
 
 
 
-```{r}
+```{r, echo=FALSE}
 #Grafico distancia de cook
 
 n<-length(ciano)
@@ -249,7 +297,7 @@ ggplot(cook_data, aes(x = Fitted, y = CookDistance))+
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 td <- resid(fit2, type = "deviance")
 fitted_values <- fitted(fit2)
 
