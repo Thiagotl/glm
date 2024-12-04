@@ -245,9 +245,9 @@ Neste capítulo, é apresentada a análise de resíduos do segundo modelo desenv
 \newpage
 
 ```{r, include=FALSE}
-library(lmtest)
-reset_test <- resettest(fit2, power = 2:3, type = "fitted")
-print(reset_test)
+# library(lmtest)
+# reset_test <- resettest(fit2, power = 2:3, type = "fitted")
+# print(reset_test)
 ```
 
 ```{r, include=FALSE}
