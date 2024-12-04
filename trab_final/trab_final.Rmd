@@ -75,7 +75,7 @@ knitr::include_graphics("imagens/clorofila-a.png")
 
 # Seleção do modelo
 
-Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Neste modelo, a variável resposta $Y(chlorophyll_a)$ segue uma distribuição Gama. A distribuição Gama é usada para modelar variáveis contínuas positivas e assimétricas, como concentrações químicas. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
+Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Devido a natureza positiva assimétrica da variável resposta $Y(chlorophyll_a)$, foi utilizado a distribuição Gamma com função de ligação logarítmica. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
 
 ```{r, include=FALSE}
 ciano <- read_excel("ciano.xlsx")
@@ -131,8 +131,9 @@ kbl(coef_df, caption = "Resultados para o modelo 1", booktabs = TRUE) |>
 ```
 
 
-Foi elaborado um novo modelo com $AIC=317$, *Residual Deviance = 28,3*. O mesmo é apresentado na tabela \ref{tab:tab2}, observa-se que as variáveis significativas para o modelo são, *total_nitrogen*, *total_phosporus*, *dissolved_oxigen*, *pH_whater*, *carbon_dioxide_water*.
+Foi ajustado um novo modelo com $AIC=317$ e Residual Deviance (28,252) que foi menor que a Deviance Nula (46,207). Os resultados são apresentado  na tabela \ref{tab:tab2}, observa-se que as variáveis significativas para o modelo são, *total_nitrogen*, *total_phosporus*, *dissolved_oxigen*, *pH_whater*, *carbon_dioxide_water*. Ademais,  teste de aderência baseado na razão entre a deviance residual $(28,252)$ e o valor crítico de qui-quadrado $qchisq(0.95,52)$ (69,832 para 52 GL) sugere que o modelo se ajusta adequadamente aos dados.
 
+Por conseguinte, A clorofila-a é positivamente influenciada por nitrogênio total, dióxido de carbono e pH da água, sendo essas variáveis significativas para o modelo. Por último, Fósforo total e oxigênio dissolvido têm tendências que podem ser relevantes em análises futuras, com mais dados ou em níveis de significância menos conservadores.
 
 
 ```{r, include=FALSE}
@@ -189,24 +190,37 @@ kbl(coef_df2, caption = "Resultdos para o modelo 2", booktabs = TRUE) |>
   add_footnote(c("Nota:*** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
 
 ```
+\newpage
 
-\[
-\eta = \beta_0 + \beta_1 \cdot \text{total\_nitrogen} + \beta_2 \cdot \text{total\_phosphorus} + \beta_3 \cdot \text{dissolved\_oxigen} + \beta_4 \cdot \text{pH\_water} + \beta_5 \cdot \text{carbon\_dioxide\_water}
-\]
+Por conseguinte, as expressões \ref{eq:modelo_eta} e \ref{eq:eta_estimado}, representam a estrutura do modelo e o modelo final com os $\beta$ estimados, respectivamente
 
 
-\[
+\begin{equation}
 \begin{aligned}
+\label{eq:modelo_eta}
+\eta = \beta_0 + \beta_1 \cdot \text{total\_nitrogen} + \beta_2 \cdot \text{total\_phosphorus} + \beta_3 \cdot \text{dissolved\_oxigen} \\ + \beta_4 \cdot \text{pH\_water} + \beta_5 \cdot \text{carbon\_dioxide\_water}
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\label{eq:eta_estimado}
 \eta = -4.239760 + 0.000889 \cdot \text{total\_nitrogen} + 0.006927 \cdot \text{total\_phosphorus} \\
 - 0.132727 \cdot \text{dissolved\_oxigen} + 0.836286 \cdot \text{pH\_water} + 0.075904 \cdot \text{carbon\_dioxide\_water}
 \end{aligned}
-\]
+\end{equation}
 
 
-\[
-\begin{array}{|l|r|p{8cm}|}
+Por último, a tabela \ref{tab:tab3} apresenta os coeficientes estimados para o modelo log-linear aplicado a $\mu$, juntamente com a interpretação de cada estimativa. Esses coeficientes indicam como cada variável preditora está associada à resposta em termos do logaritmo natural da média da variável resposta.
+
+
+\begin{table}[h!]
+\centering
+\caption{Resultados da regressão log-linear com coeficientes estimados e suas interpretações}
+\label{tab:tab3}
+\begin{tabular}{|l|r|p{8cm}|}
 \hline
-\textbf{Variável} & \textbf{Coef.(Estimativa)} & \textbf{Interpretação} \\
+\textbf{Variável} & \textbf{Coef. (Estimativa)} & \textbf{Interpretação} \\
 \hline
 \text{(Intercept)} & -4,239760 & Valor médio de \( \log(\mu) \) quando todos os preditores são iguais a zero. \\
 \hline
@@ -220,15 +234,37 @@ kbl(coef_df2, caption = "Resultdos para o modelo 2", booktabs = TRUE) |>
 \hline
 \text{carbon\_dioxide\_water} & 0,075904 & Para cada aumento unitário em \( \text{carbon\_dioxide\_water} \), \( \mu \) cresce em \( e^{0,075904} \). \\
 \hline
-\end{array}
-\]
+\end{tabular}
+\end{table}
 
 
 ## Análise de Resíduos
 
+Neste capítulo, é apresentada a análise de resíduos do segundo modelo desenvolvido. O R² generalizado foi calculado utilizando a métrica de Nagelkerke, cujo valor obtido foi 0,41957. Esse resultado indica que o modelo explica aproximadamente 41,96\% da variância observada nos dados, sugerindo um ajuste moderado. Este desempenho é coerente com a natureza do conjunto de dados, composto por informações reais coletadas em ambiente natural, que geralmente apresentam alta variabilidade intrínseca.
+
+\newpage
+
+```{r, include=FALSE}
+library(lmtest)
+reset_test <- resettest(fit2, power = 2:3, type = "fitted")
+print(reset_test)
+```
+
+```{r, include=FALSE}
+### VERIFICACAO FUNCAO DE LIGACAO (teste RESET)
+
+eta.hat<-fitted(fit2)
+eta2<-eta.hat^2
+verfify.link = glm(formula = chlorophyll_a ~ total_nitrogen + total_phosphorus +
+dissolved_oxigen + pH_water + carbon_dioxide_water + eta2, family = Gamma(link = "log"),
+data = ciano)
+summary(verfify.link) # verifique se o parametro relativo a eta_fat^2 eh significativo
+# vale estimar com outras ligacoes e testa-las tambem
+```
 
 
-```{r}
+
+```{r, include=FALSE}
 # RESIDUAL ANALYSIS
 
 
@@ -263,6 +299,7 @@ RsqGLM(fit2,plot=F)
 ```
 
 
+A figura \ref{fig:envelope}, apresenta o envelope simulado com $\alpha = 5\%$.
 
 ```{r, echo=FALSE,  out.width = "80%", fig.cap="Envelope Simulado", fig.pos = 'H', fig.align = 'center', label = "envelope"}
 #n1=2
@@ -291,7 +328,7 @@ hnp(fit2, halfnormal = F, how.many.out = T,  col.out = "red", main = "")
 
 ```
 
-
+A figura \ref{fig:cook}, apresenta a distância de cook.
 
 ```{r, echo=FALSE,  out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "cook"}
 #Grafico distancia de cook
@@ -331,7 +368,8 @@ ggplot(cook_data, aes(x = Fitted, y = CookDistance))+
 
 ```
 
-
+\newpage
+A figura \ref{fig:residuos} apresenta os gráficos para os resíduos.
 
 ```{r, echo=FALSE, out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "residuos"}
 td <- resid(fit2, type = "deviance")
