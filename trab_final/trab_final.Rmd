@@ -104,7 +104,9 @@ knitr::include_graphics("imagens/clorofila-a.png")
 
 ## Modelos Lineares Generalizados
 
-\newpage
+Um modelo linear generalizado (MLG), é uma extensão dos modelos lineares generalizados em que a variável dependente não segue, obrigatoriamente, uma distribuição normal. Podemos definir a variável resposta como o componente aleatório do modelo, pertecente a mais variadas distribuições como a normal, binomial, exponencial, etc. O compomente sistemático, variável independente, do modelo se encaixa de forma linear ao mesmo. Por último, pode-se definir a função de ligação, que a estrutura responśavel por fazer a ligação entre o componente aleatório e o componente sistemático. Em sua definição, temos que $g(\cdot)$ é uma função que transforma a média da variável responsta $E(y)=\mu$ de modo a estabelecer uma relação lienar com os preditores da seguinte forma $g(\mu)=X\beta$. 
+
+
 
 # Seleção do modelo
 
@@ -365,7 +367,7 @@ A figura \ref{fig:cook}, apresenta a distância de cook.
 
 ```{r, echo=FALSE,  out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "cook"}
 #Grafico distancia de cook
-
+ 
 n<-length(ciano)
 k<-length(coef(fit2))
 
