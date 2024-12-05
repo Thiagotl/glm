@@ -7,6 +7,7 @@ header-includes:
    - \usepackage{bm}
    - \usepackage{float}
    - \usepackage{multirow}
+   - \usepackage{tabularx}
 geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
 output:
   bookdown::pdf_document2:
@@ -39,17 +40,47 @@ library(lmtest)
 
 ```
 
+\renewcommand{\abstractname}{Resumo}
+\begin{abstract}
+XXXXX
+\end{abstract}
 
+\newpage
 # Introdução 
 
 Foi proposto um modelo linear generalizado para avaliar a produção de clorofila a em  cianobactérias em diferentes condições climáticas. O *dataset* utilizado foi obtido do catálogo de dados público do governo dos Estados Unidos, disponível em [*Data.Gov*](https://catalog.data.gov/dataset/river-cyanobacteria-datasets). Esse *datset* possui informações detalhadas sobre diferentes espécies de cianobactérias, sendo estas informações: Informações genéticas, condições climáticas do local de coleta das amostras e localização geográfica da coleta. Para a construção do modelo, foram consideradas exclusivamente as informações de clorofila a quantificada e condições ambientais (físicas e químicas) do local da coleta das amostras. O trabalho aqui desenvolvido foi fundamentado no artigo disponível no seguinte [link](https://www.nature.com/articles/s41598-023-29037-6).
 
+Sobre os dados utilizados, temos as seguintes variáveis e suas respectivas descrições (tabela \ref{tab:tab0}): \par
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.5}
+\caption{Variáveis utilizadas}
+\label{tab:tab0}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+Variável                   & Descrição                                                                           \\ \midrule
+chlorophyll\_a             & Quantidade de Clorofila a ( $\mu$g/L)                                               \\
+total\_nitrogen            & Quantidade Total de nitrogênio ($\mu$g/L)                                           \\
+total\_phosphorus          & Quantidade Total de Fósforo ( $\mu$g/L)                                             \\
+temp\_water\_celsius       & Temperatura da água (°C)                                                            \\
+dissolved\_oxigen          & Oxigênio dissolvido (mg/L)                                                          \\
+pH\_water                  & pH da água                                                                          \\
+carbon\_dioxide\_water     & Dióxido de Carbono (mg/L)                                                           \\
+total\_nitrogen\_water     & Quantidade de Nitrato, Nitrito, Amônia e Nitrogênio Orgânico (mg/L)                 \\
+nitrite\_water             & Quantidade de Nitrito (mg/L)                                                        \\
+nitrate\_water             & Quantidade de Nitrato (mg/L)                                                        \\
+phosphorus\_water          & Quantidade de Fósforo (mg/L)                                                        \\
+sulfate\_water             & Quantidade de Sulfato (mg/L)                                                        \\
+total\_nitrogen\_water     & Quantidade de Nitrato, Nitrito, Amônia e Nitrogênio Orgânico (mg/L) - água filtrada \\
+ammonia(NH3 + NH4+)\_water & Quantidade de NH3+ e NH4+ (mg/L) como NH4                                           \\ \bottomrule
+\end{tabularx}
+\end{table}
+
+
 ## Cianobactérias 
 
 Devido a atividade fotossintetizante das cianobactérias estima-se que as primeiras tiveram origem entre 2,6 a 3,5 bilhões de anos atrás (LAU e colab., 2015) e são uma das principais responsáveis pela atmosfera oxigenada como conhecemos hoje, participando do “Grande Evento de Oxigenação’’(HUISMAN e colab., 2018; PLANAVSKY e colab., 2014; RASMUSSEN e colab., 2008). O estromatólitos são uma evidência da atividade de microrganismos que ocorreu a , aproximadamente 3,700 milhões de anos  atrás (NUTMAN e colab., 2016).
-As cianobactérias são classificadas como microrganismo procariontes autotróficos com sistemas adaptativos particulares, como a capacidade  de fixar nitrogênio do ar atmosférico devido a presença da enzima nitrogenase localizada nos heterócitos (PETERS e colab., 2015). São capazes de realizar a fotossíntese na presença ou ausência de oxigênio. Existem espécies que se desenvolvem na ausência de luz  ou em condições anaeróbicas utilizando sulfetos como doadores de elétrons para a fotossíntese, além disso são bactérias gram – negativas e dispõem da estrutura chamada bainha mucilaginosa e tricoma, podem ou não apresentar o acineto e o heterócitos  que  são estruturas especializadas na sobrevivência da espécie em ambientes não favoráveis (ABED e colab., 2009; COHEN e colab., 1986; HUISMAN e colab., 2018; LAU e colab., 2015; STAL e MOEZELAAR, 1997). 
-
-A figura \ref{fig:fig1}, apresenta algumas das cianobactérias encontradas na região amazônica. As mesmas podem apresentar estrutura filamentosa, colonial, etc.
+As cianobactérias são classificadas como microrganismo procariontes autotróficos com sistemas adaptativos particulares, como a capacidade  de fixar nitrogênio do ar atmosférico devido a presença da enzima nitrogenase localizada nos heterócitos (PETERS e colab., 2015). São capazes de realizar a fotossíntese na presença ou ausência de oxigênio. Existem espécies que se desenvolvem na ausência de luz  ou em condições anaeróbicas utilizando sulfetos como doadores de elétrons para a fotossíntese, além disso são bactérias gram – negativas e dispõem da estrutura chamada bainha mucilaginosa e tricoma, podem ou não apresentar o acineto e o heterócitos  que  são estruturas especializadas na sobrevivência da espécie em ambientes não favoráveis (ABED e colab., 2009; COHEN e colab., 1986; HUISMAN e colab., 2018; LAU e colab., 2015; STAL e MOEZELAAR, 1997). A figura \ref{fig:fig1}, apresenta algumas das cianobactérias encontradas na região amazônica. As mesmas podem apresentar estrutura filamentosa, colonial, etc.
 
 ```{r, echo=FALSE, out.width = "80%", fig.cap="Cianobactérias-Fonte: Coleção Amazônica de Cianobactérias e Microalgas", fig.pos = 'H', fig.align = 'center', label = "fig1"}
 knitr::include_graphics("imagens/cianobacteria.png")
@@ -62,7 +93,6 @@ autótrofos, utilizada como indicadora da biomassa em
 ambientes aquáticos.
 
 
-
 ```{r,  echo=FALSE, out.width = "60%", fig.cap="Clorofila a", fig.pos = 'H', fig.align = 'center', label = "fig2"}
 
 
@@ -70,6 +100,9 @@ knitr::include_graphics("imagens/clorofila-a.png")
 
 
 ```
+
+
+## Modelos Lineares Generalizados
 
 \newpage
 
