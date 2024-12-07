@@ -42,7 +42,11 @@ library(lmtest)
 
 \renewcommand{\abstractname}{Resumo}
 \begin{abstract}
-XXXXX
+Este trabalho investiga a relação entre variáveis ambientais e a produção de clorofila-a em cianobactérias, utilizando Modelos Lineares Generalizados (MLGs). O estudo utiliza um conjunto de dados obtido do catálogo público dos Estados Unidos, contendo informações genéticas, ambientais e geográficas de diversas espécies de cianobactérias. A variável resposta, clorofila-a, foi modelada considerando características ambientais, como nitrogênio total, fósforo total, oxigênio dissolvido, pH da água e dióxido de carbono dissolvido.
+
+Os modelos foram ajustados com distribuição Gamma e função de ligação logarítmica devido à natureza assimétrica e positiva da variável resposta. A seleção do modelo baseou-se na técnica stepwise para minimizar o critério de informação de Akaike (AIC). O modelo final identificou que o nitrogênio total, fósforo total, dióxido de carbono e pH da água possuem influência significativa na produção de clorofila-a. Oxigênio dissolvido também mostrou tendência relevante, mas com significância marginal.
+
+A análise de resíduos confirmou a adequação do modelo, indicando ausência de observações influentes e distribuição aleatória dos resíduos, sugerindo homocedasticidade. O desempenho geral do modelo, medido pelo R² de Nagelkerke, foi moderado, explicando cerca de 41,96% da variância dos dados.
 \end{abstract}
 
 \newpage
