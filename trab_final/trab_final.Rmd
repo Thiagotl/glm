@@ -159,9 +159,6 @@ Um modelo linear generalizado (MLG), é uma extensão dos modelos lineares gener
 Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Devido a natureza positiva assimétrica da variável resposta $Y(chlorophyll_a)$, foi utilizado a distribuição Gamma com função de ligação logarítmica. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
 
 
-
-
-
 ```{r, include=FALSE}
 #tabela com os valores do primeiro fit 
 
@@ -191,10 +188,8 @@ kbl(coef_df, caption = "Resultados para o modelo 1", booktabs = TRUE) |>
 ```
 
 
-Foi ajustado um novo modelo com $AIC=317$ e Residual Deviance (28,252) que foi menor que a Deviance Nula (46,207). Os resultados são apresentado  na tabela \ref{tab:tab2}, observa-se que as variáveis significativas para o modelo são, *total_nitrogen*, *total_phosporus*, *dissolved_oxigen*, *pH_whater*, *carbon_dioxide_water*. Ademais,  teste de aderência baseado na razão entre a deviance residual $(28,252)$ e o valor crítico de qui-quadrado $qchisq(0.95,52)$ (69,832 para 52 GL) sugere que o modelo se ajusta adequadamente aos dados.
+Foi ajustado um novo modelo com $AIC=317$ e Residual Deviance (28,252) que foi menor que a Deviance Nula (46,207). Os resultados são apresentado  na tabela \ref{tab:tab2}, observa-se que as variáveis significativas para o modelo são, *total_nitrogen*, *total_phosporus*, *dissolved_oxigen*, *pH_whater*, *carbon_dioxide_water*. Ademais,  teste de aderência baseado na razão entre a deviance residual $(28,252)$ e o valor crítico de qui-quadrado $qchisq(0.95,52)$ (69,832 para 52 GL) sugere que o modelo se ajusta adequadamente aos dados. Também foi testado a função de ligação utilizando o teste RESET, no qual foi obtido um $p-valor=0.0996$ indicando que a função de ligação (log), foi adequada para o modelo.
 
-
-XXXX
 
 Por conseguinte, a clorofila-a é positivamente influenciada por nitrogênio total, dióxido de carbono e pH da água, sendo essas variáveis significativas para o modelo. Por último, Fósforo total e oxigênio dissolvido têm tendências que podem ser relevantes em análises futuras, com mais dados ou em níveis de significância menos conservadores.
 
@@ -208,6 +203,21 @@ summary(fit2)
 qchisq(0.95,52)
 
 ```
+
+```{r, include=FALSE}
+### VERIFICACAO FUNCAO DE LIGACAO (teste RESET)
+
+eta.hat<-fitted(fit2)
+eta2<-eta.hat^2
+verfify.link = glm(formula = chlorophyll_a ~ total_nitrogen + total_phosphorus +
+dissolved_oxigen + pH_water + carbon_dioxide_water + eta2, family = Gamma(link = "log"),
+data = ciano)
+summary(verfify.link) # verifique se o parametro relativo a eta_fat^2 eh significativo
+# vale estimar com outras ligacoes e testa-las tambem
+```
+
+
+
 
 
 ```{r, include=FALSE}
