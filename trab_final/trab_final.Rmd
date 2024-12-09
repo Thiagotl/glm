@@ -40,6 +40,30 @@ library(lmtest)
 
 ```
 
+
+```{r, include=FALSE}
+ciano <- read_excel("ciano.xlsx")
+ciano$chlorophyll_a<-as.double(ciano$chlorophyll_a)
+ciano$chlorophyll_a[is.na(ciano$chlorophyll_a)]<-round(mean(ciano$chlorophyll_a, na.rm = TRUE), 2)
+
+#Descritiva basica para o dataset
+
+summary(ciano)
+
+# primeiro modelo 
+
+fit <- glm(chlorophyll_a ~ ., family = Gamma(link = "log"), data = ciano)
+
+#fit do primeiro modelo
+summary(fit)
+
+
+#verificando o ajuste do modelo usando o deviance
+
+qchisq(0.95,44)
+```
+
+
 \renewcommand{\abstractname}{Resumo}
 \begin{abstract}
 Este trabalho investiga a relação entre variáveis ambientais e a produção de clorofila-a em cianobactérias, utilizando Modelos Lineares Generalizados (MLGs). O estudo utiliza um conjunto de dados obtido do catálogo público dos Estados Unidos, contendo informações genéticas, ambientais e geográficas de diversas espécies de cianobactérias. A variável resposta, clorofila-a, foi modelada considerando características ambientais, como nitrogênio total, fósforo total, oxigênio dissolvido, pH da água e dióxido de carbono dissolvido.
@@ -80,6 +104,24 @@ ammonia(NH3 + NH4+)\_water & Quantidade de NH3+ e NH4+ (mg/L) como NH4          
 \end{tabularx}
 \end{table}
 
+## Análise Descritiva
+
+Nesta seção são apresentados os resultados referentes a análise descritiva dos dados. As tabelas \ref{tab:descritiva} e \ref{tab:descritiva2} mostram os valores de mínimo, máximo, média dos dados em estudo. Destaca-se a variável **chlorophyll\_a** que possui a característica de ser contínua e positiva, e justifica o uso da distribuição Gamma para modelar a mesma. 
+
+```{r echo=FALSE, label="descritiva"}
+descritiva<-summary(ciano[,1:7 ])
+kable(descritiva, format = "latex", booktabs = TRUE,caption = "Análise descritiva")  |> 
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+
+```{r echo=FALSE, label="descritiva2"}
+descritiva<-summary(ciano[,8:14 ])
+kable(descritiva, format = "latex", booktabs = TRUE,caption = "Análise descritiva")  |> 
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+
 
 ## Cianobactérias 
 
@@ -116,27 +158,6 @@ Um modelo linear generalizado (MLG), é uma extensão dos modelos lineares gener
 
 Nesta seção são apresentados os resultados da elaboração dos modelos para explicar a variabilidade de produção de clorofila a. Devido a natureza positiva assimétrica da variável resposta $Y(chlorophyll_a)$, foi utilizado a distribuição Gamma com função de ligação logarítmica. Seja $Y~Gamma(\mu,\phi)$ em que: $\mu$ é a média e $\phi$ é o parâmetro de dispersão. 
 
-```{r, include=FALSE}
-ciano <- read_excel("ciano.xlsx")
-ciano$chlorophyll_a<-as.double(ciano$chlorophyll_a)
-ciano$chlorophyll_a[is.na(ciano$chlorophyll_a)]<-round(mean(ciano$chlorophyll_a, na.rm = TRUE), 2)
-
-#Descritiva basica para o dataset
-
-summary(ciano)
-
-# primeiro modelo 
-
-fit <- glm(chlorophyll_a ~ ., family = Gamma(link = "log"), data = ciano)
-
-#fit do primeiro modelo
-summary(fit)
-
-
-#verificando o ajuste do modelo usando o deviance
-
-qchisq(0.95,44)
-```
 
 
 
