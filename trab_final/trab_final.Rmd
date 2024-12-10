@@ -33,6 +33,7 @@ library(kableExtra)
 library(knitr)
 library(GGally)
 library(hnp)
+library(ggcorrplot)
 
 ####
 library(car)
@@ -119,6 +120,21 @@ kable(descritiva, format = "latex", booktabs = TRUE,caption = "Análise descriti
 descritiva<-summary(ciano[,8:14 ])
 kable(descritiva, format = "latex", booktabs = TRUE,caption = "Análise descritiva")  |> 
   kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+A imagem \ref{fig:corr}, apresenta as correlações entre as variáveis.
+
+```{r, echo=FALSE,fig.width=12, fig.height=8, fig.cap="Matriz de Correlação", fig.pos = 'H', fig.align = 'center', label = "corr"}
+
+corr <- cor(ciano)
+
+# Criar nomes abreviados para as variáveis
+colnames(corr) <- abbreviate(colnames(corr), minlength = 4)
+rownames(corr) <- abbreviate(rownames(corr), minlength = 4)
+
+
+ggcorrplot(corr, hc.order = TRUE, type = "lower",
+   lab = TRUE)
 ```
 
 
@@ -263,7 +279,7 @@ kbl(coef_df2, caption = "Resultdos para o modelo 2", booktabs = TRUE) |>
   add_footnote(c("Nota:*** p<0.001; ** p<0.01; * p<0.05; . p<0.1"))
 
 ```
-\newpage
+
 
 Por conseguinte, as expressões \ref{eq:modelo_eta} e \ref{eq:eta_estimado}, representam a estrutura do modelo e o modelo final com os $\beta$ estimados, respectivamente
 
@@ -497,23 +513,23 @@ ggplot(residuals_data, aes(x = Fitted, y = Residuals)) +
 
 ```{r, include=FALSE}
 
-pdf(file = "Envelope_simulado.pdf",width = width, height = height,family = "Times")
-par(mar=c(mar_b, mar_e, mar_c, mar_d)) 
-par(mgp=c(dist_text, dist_tick, 0))
-plot(td |> 
-       as.data.frame() |> 
-       ggplot2::ggplot(ggplot2::aes(sample = td)) +
-       qqplotr::geom_qq_band(
-         alpha = 0.5, fill = "white", col = "black", B = 100,
-         bandType = "boot"
-       ) +
-       qqplotr::stat_qq_point(size = 0.8) +
-       ggplot2::scale_fill_discrete("Bandtype") +
-       ggplot2::labs(x = "Quantis Teóricos", y = "Resíduos") +
-       ggplot2::theme_bw() +
-       ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                      panel.grid.minor = ggplot2::element_blank()))
-dev.off()
+# pdf(file = "Envelope_simulado.pdf",width = width, height = height,family = "Times")
+# par(mar=c(mar_b, mar_e, mar_c, mar_d)) 
+# par(mgp=c(dist_text, dist_tick, 0))
+# plot(td |> 
+#        as.data.frame() |> 
+#        ggplot2::ggplot(ggplot2::aes(sample = td)) +
+#        qqplotr::geom_qq_band(
+#          alpha = 0.5, fill = "white", col = "black", B = 100,
+#          bandType = "boot"
+#        ) +
+#        qqplotr::stat_qq_point(size = 0.8) +
+#        ggplot2::scale_fill_discrete("Bandtype") +
+#        ggplot2::labs(x = "Quantis Teóricos", y = "Resíduos") +
+#        ggplot2::theme_bw() +
+#        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+#                       panel.grid.minor = ggplot2::element_blank()))
+# dev.off()
 
 ```
 
