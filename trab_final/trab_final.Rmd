@@ -418,9 +418,21 @@ hnp(fit2, halfnormal = F, how.many.out = T,  col.out = "red", main = "")
 
 ```
 
-A figura \ref{fig:cook}, apresenta a distância de cook e auxilia na identificação de observações influentes. No eixo horizontal estão os valores ajustados (valores preditos pelo modelo), enquanto no eixo vertical estão os valores da Distância de Cook. Neste gráfico, as observações representadas pelos pontos azuis estão abaixo do limite estabelecido, sugerindo que não há observações influentes significativas. Isso indica que os dados não possuem valores que exerçam grande impacto na estabilidade do modelo, o que é desejável em análises de regressão.
+A figura \ref{fig:hist}, apresenta o histograma dos resíduos.
 
-```{r, echo=FALSE,  out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "cook"}
+```{r, echo=FALSE,  out.width = "80%", fig.cap="Histograma Resíduos", fig.pos = 'H', fig.align = 'center', label = "hist"}
+
+residuo <- rstudent(fit2)
+
+hist(residuo)
+
+
+```
+
+
+A figura \ref{fig:c}, apresenta a distância de cook e auxilia na identificação de observações influentes. No eixo horizontal estão os valores ajustados (valores preditos pelo modelo), enquanto no eixo vertical estão os valores da Distância de Cook. Neste gráfico, as observações representadas pelos pontos azuis estão abaixo do limite estabelecido, sugerindo que não há observações influentes significativas. Isso indica que os dados não possuem valores que exerçam grande impacto na estabilidade do modelo, o que é desejável em análises de regressão.
+
+```{r, echo=FALSE,  out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "c"}
 #Grafico distancia de cook
  
 n<-length(ciano)
@@ -459,14 +471,12 @@ ggplot(cook_data, aes(x = Fitted, y = CookDistance))+
 ```
 
 \newpage
-A figura \ref{fig:residuos} apresenta os gráficos para os resíduos. No gráfico, gráfico de Resíduos vs Índices, temos no eixo horizontal os índices das observações, enquanto no eixo vertical estão os resíduos deviance do modelo, que representam as diferenças entre os valores observados e os valores ajustados. Os resíduos devem estar distribuídos aleatoriamente ao redor da linha zero. Por último, os resíduos parecem dispersos de forma relativamente aleatória, sugerindo que o modelo não apresenta violações de homocedasticidade.
+A figura \ref{fig:r} apresenta os gráficos para os resíduos. No gráfico, gráfico de Resíduos vs Índices, temos no eixo horizontal os índices das observações, enquanto no eixo vertical estão os resíduos deviance do modelo, que representam as diferenças entre os valores observados e os valores ajustados. Os resíduos devem estar distribuídos aleatoriamente ao redor da linha zero. Por último, os resíduos parecem dispersos de forma relativamente aleatória, sugerindo que o modelo não apresenta violações de homocedasticidade.
 
 Por conseguinte, no gráfico de Resíduos vs Valores Ajustados, temos no eixo horizontal estão os valores ajustados pelo modelo, e no eixo vertical estão os resíduos deviance, que representam as diferenças entre os valores observados e os valores preditos pelo modelo.
 
 
-
-
-```{r, echo=FALSE, out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "residuos"}
+```{r, echo=FALSE, out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "r"}
 td <- resid(fit2, type = "deviance")
 fitted_values <- fitted(fit2)
 
@@ -509,6 +519,28 @@ ggplot(residuals_data, aes(x = Fitted, y = Residuals)) +
 ```
 
 
+A imagem \ref{fig:x} apresenta o gráfico de alavancagem, nota-se que apesar de existir alguns pontos influentes acima da linha vermelha, não são valores que influenciam na performace do modelo. 
+
+
+```{r, echo=FALSE, out.width = "80%", fig.cap="", fig.pos = 'H', fig.align = 'center', label = "x"}
+hat_values <- hatvalues(fit2)
+
+ggplot(data = data.frame(Valores_Ajustados = fitted(fit2), Alavancagem = hat_values), 
+       aes(x = Valores_Ajustados, y = Alavancagem)) +
+  geom_point() +
+  geom_hline(yintercept = 2 * mean(hat_values), linetype = "dashed", color = "red") +
+  labs(
+    title = "Gráfico de Alavancagem",
+    x = "Valores Ajustados",
+    y = "Alavancagem (Valores Hat)"
+  ) +
+  theme_minimal() +
+  annotate("text", x = max(fitted(fit2)), y = 2 * mean(hat_values), 
+           label = "", hjust = 1, vjust = -0.5)
+```
+
+
+
 
 
 ```{r, include=FALSE}
@@ -532,4 +564,6 @@ ggplot(residuals_data, aes(x = Fitted, y = Residuals)) +
 # dev.off()
 
 ```
+
+
 
